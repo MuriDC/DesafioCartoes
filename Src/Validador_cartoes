@@ -1,0 +1,30 @@
+import re
+
+def validate_credit_card(card_number):
+    # Remove spaces and hyphens
+    card_number = re.sub(r'[\s-]', '', card_number)
+
+    card_patterns = {
+        "Visa 16 digits": r"^4\d{15}$",
+        "Master Card": r"^(5[1-5]\d{14}|2(2[2-9][1-9]|2[3-9]\d|[3-6]\d{2}|7([01]\d|20))\d{12})$",
+        "American Express": r"^3[47]\d{13}$",
+        "Dinners Club": r"^3(?:0[0-5]|[68]\d)\d{11}$",  # 300-305, 36, 38 (14 digits)
+        "Discover": r"^6(?:011|5\d{2}|4[4-9]\d)\d{12}$",  # 6011, 65, 644-649 (16 digits)
+        "EnRoute": r"^(2014|2149)\d{11}$",  # 2014, 2149 (15 digits)
+        "JCB": r"^(?:2131|1800|35\d{3})\d{11}$",  # 2131, 1800 (15), 35 (16)
+        "Voyager": r"^8699\d{11}$",  # 8699 (15 digits)
+        "HiperCard": r"^6062\d{12}$",  # 6062 (16 digits)
+        "Aura": r"^50\d{14}$",  # 50 (16 digits only)
+    }
+
+    for card_type, pattern in card_patterns.items():
+        if re.fullmatch(pattern, card_number):
+            return f"Valid {card_type}"
+    return "Invalid or Unknown Card Type"
+
+# Example usage:
+print(validate_credit_card("4111 1111 1111 1111"))  # Valid Visa 16 digits
+print(validate_credit_card("5105 1051 0510 5100"))  # Valid Master Card
+print(validate_credit_card("3714 496353 98431"))    # Valid American Express
+print(validate_credit_card("6062 8282 8282 8282"))  # Valid HiperCard
+print(validate_credit_card("5012345678901234"))     # Valid Aura
